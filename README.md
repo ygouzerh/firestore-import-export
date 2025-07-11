@@ -2,6 +2,15 @@
 
 Tools for safely exporting and importing Firebase Firestore database structure and data.
 
+## ⚠️ Disclaimer
+
+This tool was originally created for my personal use and is not a polished, production-ready solution. It may contain bugs, edge cases, and limitations that haven't been fully tested. Use at your own risk and always:
+
+- Test thoroughly in development environments first
+- Keep backups of your data
+- Use dry-run mode extensively
+- Review all outputs before proceeding with live imports
+
 ## 🎯 Purpose
 
 These tools help you manage your Firebase databases by providing:
