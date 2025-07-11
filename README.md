@@ -71,13 +71,14 @@ export DRY_RUN=true
 
 ```
 utils/
-├── export.py              # Database export tool
-├── import.py              # Database import tool
-├── run_export.sh          # Export runner script
-├── run_import.sh          # Import runner script
-├── firestore_export/      # Export output directory
-├── firestore_import/      # Import input directory
-└── README.md              # This file
+├── export.py                   # Database export tool
+├── import.py                   # Database import tool
+├── run_export.sh               # Export runner script
+├── run_import.sh               # Import runner script
+├── firestore_export/           # Export output directory
+├── firestore_import/           # Import input directory
+├── firestore_import_reports/   # Import reports directory
+└── README.md                   # This file
 ```
 
 ## 📊 Output Structure
@@ -214,13 +215,15 @@ Options:
 After each import, the tool generates:
 
 - **Console Output**: Real-time progress and results
-- **Import Report**: JSON file with detailed statistics
+- **Import Report**: JSON file with detailed statistics saved in `firestore_import_reports/`
 - **Error Logs**: Any issues encountered during import
 
 Example report location:
 ```
-firestore_import/import_report_20250111_143022.json
+firestore_import_reports/import_report_20250111_143022.json
 ```
+
+The reports are automatically organized in a separate directory to keep them from interfering with collection files during future imports.
 
 ## 🔧 Troubleshooting
 
