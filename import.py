@@ -8,7 +8,7 @@ to a specified Firestore database.
 ENVIRONMENT VARIABLES:
 - FIREBASE_PROJECT_ID: Target Firebase project ID
 - FIREBASE_SERVICE_ACCOUNT_PATH: Path to service account JSON file
-- FIREBASE_DATABASE_NAME: Database name (optional, defaults to "default")
+- FIREBASE_DATABASE_NAME: Database name (optional, defaults to "(default)")
 - IMPORT_DIR: Directory containing JSON files (optional, defaults to "firestore_import")
 - DRY_RUN: Set to "true" for dry-run mode (optional, defaults to "false")
 
@@ -153,29 +153,47 @@ class FirestoreImporter:
         error_count = 0
         
         for doc_info in documents:
-            doc_id = doc_info['id']
+            # Handle documents with or without explicit IDs
+            if 'id' in doc_info:
+                doc_id = doc_info['id']
+                use_auto_id = False
+            else:
+                doc_id = None  # Will use auto-generated ID
+                use_auto_id = True
+            
             doc_data = self._deserialize_firestore_data(doc_info['data'])
             
             try:
                 if not self.dry_run:
-                    # Check if document exists
-                    existing_doc = collection_ref.document(doc_id).get()
-                    
-                    if existing_doc.exists and not overwrite:
-                        print(f"  ⏭️  Skipped existing document: {doc_id}")
-                        skipped_count += 1
-                        continue
-                    
-                    # Import the document
-                    collection_ref.document(doc_id).set(doc_data)
-                    imported_count += 1
-                    print(f"  ✅ Imported document: {doc_id}")
+                    if use_auto_id:
+                        # Use auto-generated ID
+                        doc_ref = collection_ref.document()
+                        doc_id = doc_ref.id
+                        doc_ref.set(doc_data)
+                        imported_count += 1
+                        print(f"  ✅ Imported document with auto-generated ID: {doc_id}")
+                    else:
+                        # Use provided ID
+                        existing_doc = collection_ref.document(doc_id).get()
+                        
+                        if existing_doc.exists and not overwrite:
+                            print(f"  ⏭️  Skipped existing document: {doc_id}")
+                            skipped_count += 1
+                            continue
+                        
+                        collection_ref.document(doc_id).set(doc_data)
+                        imported_count += 1
+                        print(f"  ✅ Imported document: {doc_id}")
                 else:
-                    print(f"  🔍 [DRY-RUN] Would import document: {doc_id}")
+                    if use_auto_id:
+                        print(f"  🔍 [DRY-RUN] Would import document with auto-generated ID")
+                    else:
+                        print(f"  🔍 [DRY-RUN] Would import document: {doc_id}")
                     imported_count += 1
                 
             except Exception as e:
-                print(f"  ❌ Error importing document {doc_id}: {e}")
+                display_id = doc_id if doc_id else "auto-generated"
+                print(f"  ❌ Error importing document {display_id}: {e}")
                 error_count += 1
         
         result = {
@@ -335,7 +353,7 @@ def main():
     SERVICE_ACCOUNT_PATH = os.getenv("FIREBASE_SERVICE_ACCOUNT_PATH")
     IMPORT_DIR = os.getenv("IMPORT_DIR", "firestore_import")
     DRY_RUN = os.getenv("DRY_RUN", "false").lower() == "true"
-    DATABASE_NAME = os.getenv("FIREBASE_DATABASE_NAME", "default")
+    DATABASE_NAME = os.getenv("FIREBASE_DATABASE_NAME", "(default)")
 
     if not PROJECT_ID:
         print("❌ Error: FIREBASE_PROJECT_ID environment variable not set")
