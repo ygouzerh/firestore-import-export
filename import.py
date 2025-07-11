@@ -113,8 +113,9 @@ class FirestoreImporter:
         # Extract collection names from filenames (remove .json extension)
         collections = []
         for json_file in json_files:
-            # Skip the complete database structure file
-            if json_file.name != "complete_database_structure.json":
+            # Skip the complete database structure file and import reports
+            if (json_file.name != "complete_database_structure.json" and 
+                not json_file.name.startswith("import_report_")):
                 collection_name = json_file.stem
                 collections.append(collection_name)
         
@@ -238,7 +239,11 @@ class FirestoreImporter:
         
         # Save import report
         if not self.dry_run:
-            report_file = Path(import_dir) / f"import_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+            # Create reports directory if it doesn't exist
+            reports_dir = Path(import_dir).parent / "firestore_import_reports"
+            reports_dir.mkdir(exist_ok=True)
+            
+            report_file = reports_dir / f"import_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
             with open(report_file, 'w', encoding='utf-8') as f:
                 json.dump(results, f, indent=2, ensure_ascii=False)
             print(f"📋 Import report saved: {report_file}")
