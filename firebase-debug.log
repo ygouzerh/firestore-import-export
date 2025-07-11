@@ -1,0 +1,21 @@
+[debug] [2025-07-11T03:40:04.349Z] ----------------------------------------------------------------------
+[debug] [2025-07-11T03:40:04.351Z] Command:       /opt/homebrew/Cellar/node/24.4.0/bin/node /opt/homebrew/bin/firebase init
+[debug] [2025-07-11T03:40:04.351Z] CLI Version:   14.10.1
+[debug] [2025-07-11T03:40:04.351Z] Platform:      darwin
+[debug] [2025-07-11T03:40:04.351Z] Node Version:  v24.4.0
+[debug] [2025-07-11T03:40:04.351Z] Time:          Fri Jul 11 2025 11:40:04 GMT+0800 (Hong Kong Standard Time)
+[debug] [2025-07-11T03:40:04.351Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-07-11T03:40:04.353Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-07-11T03:40:04.353Z] > authorizing via signed-in user (yohan.gouzerh@mantra.finance)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /Users/yohan/w/mantra-finance/legacy/utils
+
