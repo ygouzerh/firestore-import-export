@@ -8,7 +8,7 @@ to a specified Firestore database.
 ENVIRONMENT VARIABLES:
 - FIREBASE_PROJECT_ID: Target Firebase project ID
 - FIREBASE_SERVICE_ACCOUNT_PATH: Path to service account JSON file
-- FIREBASE_DATABASE_NAME: Database name (optional, defaults to "(default)")
+- FIREBASE_DATABASE_NAME: Database name (optional, defaults to "default")
 - IMPORT_DIR: Directory containing JSON files (optional, defaults to "firestore_import")
 - DRY_RUN: Set to "true" for dry-run mode (optional, defaults to "false")
 
@@ -82,7 +82,7 @@ class FirestoreImporter:
         if self.database_name == "(default)":
             self.db = firestore.client()
         else:
-            self.db = firestore.client(database=self.database_name)
+            self.db = firestore.client(database_id=self.database_name)
         
         mode = "DRY-RUN" if self.dry_run else "LIVE"
         db_info = f"database '{self.database_name}'" if self.database_name != "(default)" else "default database"
@@ -330,7 +330,7 @@ def main():
     SERVICE_ACCOUNT_PATH = os.getenv("FIREBASE_SERVICE_ACCOUNT_PATH")
     IMPORT_DIR = os.getenv("IMPORT_DIR", "firestore_import")
     DRY_RUN = os.getenv("DRY_RUN", "false").lower() == "true"
-    DATABASE_NAME = os.getenv("FIREBASE_DATABASE_NAME", "(default)")
+    DATABASE_NAME = os.getenv("FIREBASE_DATABASE_NAME", "default")
 
     if not PROJECT_ID:
         print("❌ Error: FIREBASE_PROJECT_ID environment variable not set")
